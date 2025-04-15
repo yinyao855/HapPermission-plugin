@@ -17,7 +17,6 @@ export class SystemApiRecognizer {
     arkUIRender = new Set(['build']);
     forEachComponents = new Set(['LazyForEach', 'ForEach']);
     scene = new Scene();
-    typeChecker?: ts.TypeChecker;
     apiInfos: ApiDeclarationInformation[] = [];
     apiInfoSet = new Set<string>();
 
@@ -25,20 +24,16 @@ export class SystemApiRecognizer {
         this.systemRoot = systemRoot;
     }
 
-    setTypeChecker(typeChecker: ts.TypeChecker) {
-        this.typeChecker = typeChecker;
-    }
-
     buildScene() {
         let config: SceneConfig = new SceneConfig();
-        config.buildFromJson(join(__dirname, '../arkpermission_config.json'));
+        config.buildFromJson(join(__dirname, '../../../arkpermission_config.json'));
         this.scene.buildBasicInfo(config);
         this.scene.buildScene4HarmonyProject();
         this.scene.collectProjectImportInfos();
         this.scene.inferTypes();
     }
 
-    recognize(sourceFile: ts.SourceFile, filePath: string) {
+    recognize(filePath: string) {
         const fileName = filePath.replace(this.scene.getRealProjectDir() + "/", "");
         const fromSignature = new FileSignature(this.scene.getProjectName(), fileName);
         const arkFile = this.scene.getFile(fromSignature);
