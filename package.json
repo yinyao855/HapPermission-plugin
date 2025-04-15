@@ -1,0 +1,22 @@
+{
+  "name": "arkpermission-idea-plugin",
+  "version": "1.0.0",
+  "description": "A deveco/idea plugin for ArkPermission",
+  "main": "./src/main/ts/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "arkanalyzer": "1.0.7",
+    "browserify-fs": "^1.0.0",
+    "exceljs": "^4.4.0",
+    "log4js": "6.7.1",
+    "source-map": "^0.7.4",
+    "ts-loader": "^9.5.1"
+  },
+  "devDependencies": {
+    "ohos-typescript": "^4.9.5-r6",
+    "ts-node": "^10.9.2"
+  }
+}
