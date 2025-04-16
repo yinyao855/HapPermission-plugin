@@ -5,6 +5,7 @@ import { ReporterFormat } from './configs';
 import { CommandArgs } from './index'
 import fs from 'fs';
 import path from 'path';
+import {ApiAnalyzer} from "./api_analyzer";
 
 // 定义 ApiCollector 类
 class ApiCollector {
@@ -89,6 +90,8 @@ class ApiCollector {
     // systemApiRecognizer = undefined;
     await apiWriter.flush();
     fs.writeFileSync(handleFilePath, originalContent);
+    let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, "14");
+    await apiAnalyzer.analyze();
   }
 
   getApiWriter(): ApiWriter {
