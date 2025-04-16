@@ -10,7 +10,7 @@ import javax.swing.JPanel
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 
-class PermissionCheckerToolWindowFactory : ToolWindowFactory, DumbAware {
+class ArkPermissionToolWindowFactory : ToolWindowFactory, DumbAware {
     companion object {
         var outputArea: JTextArea? = null
     }
@@ -23,7 +23,7 @@ class PermissionCheckerToolWindowFactory : ToolWindowFactory, DumbAware {
         val panel = JPanel(BorderLayout())
         panel.add(JScrollPane(textArea), BorderLayout.CENTER)
 
-        val content = ContentFactory.getInstance().createContent(panel, "Permission Checker", false)
+        val content = ContentFactory.getInstance().createContent(panel, "配置", false)
         toolWindow.contentManager.addContent(content)
     }
 }
