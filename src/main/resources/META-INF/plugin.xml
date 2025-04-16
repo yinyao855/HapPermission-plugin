@@ -24,6 +24,18 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <toolWindow id="Permission Checker"
+                    factoryClass="org.arkpermission.PermissionCheckerToolWindowFactory"
+                    anchor="bottom"
+                    canCloseContents="true"/>
     </extensions>
+
+    <actions>
+        <action id="PermissionCheckerToolWindow"
+                class="org.arkpermission.PermissionCheckerAction"
+                text="Run Permission Checker"
+                description="Run arkpermission and show output in ToolWindow">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
