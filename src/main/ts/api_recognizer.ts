@@ -1,14 +1,13 @@
-import { join } from "path";
-import ts from "ohos-typescript";
+import {join} from "path";
 import {
-    SceneConfig,
-    Scene,
-    ArkInvokeStmt,
     ArkClass,
-    ArkMethod,
     ArkFile,
+    ArkInvokeStmt,
+    ArkMethod,
     FileSignature,
-    LineColPosition
+    LineColPosition,
+    Scene,
+    SceneConfig
 } from "arkanalyzer";
 
 export class SystemApiRecognizer {
@@ -89,13 +88,19 @@ export class SystemApiRecognizer {
                 apiInfo.setPropertyName(methodSubSignature.getMethodName());
                 // 函数
                 apiInfo.setApiRawText(methodSubSignature.toString());
+                const methodCode = this.scene.getMethod(methodSignature)?.getCode();
+                if (methodCode) {
+                    apiInfo.setApiRawText(methodCode);
+                }
                 // 文件位置
                 const sourceFileName = arkMethod.getDeclaringArkFile().getFilePath();
                 apiInfo.setSourceFileName(sourceFileName);
                 const pos = stmt.getOriginPositionInfo();
                 apiInfo.setPosition(pos);
                 // 添加api信息
-                this.addApiInformation(apiInfo);
+                if(apiInfo.packageName !== "_UnknownFileName" && !apiInfo.packageName.endsWith("ets")) {
+                    this.addApiInformation(apiInfo);
+                }
             }
         }
     }
@@ -113,11 +118,7 @@ export class SystemApiRecognizer {
     }
 
     getApiInformations() {
-        const apiDecInfos = this.apiInfos ? this.apiInfos : [];
-        // apiDecInfos.forEach((apiInfo) => {
-        //   apiInfo.setApiNode(undefined);
-        // });
-        return apiDecInfos;
+        return this.apiInfos ? this.apiInfos : [];
     }
 
     recognizeDecorators(node: ArkClass | ArkMethod) {
@@ -153,7 +154,6 @@ export class ApiDeclarationInformation {
     useInstead: string = '';
     typeName: string = '';
     componentName: string = '';
-    apiNode: any = undefined;
     apiType: string = '';
     dtsPath: string = '';
     apiText: string = ''
@@ -219,10 +219,6 @@ export class ApiDeclarationInformation {
 
     setComponentName(componentName: string) {
         this.componentName = componentName;
-    }
-
-    setApiNode(node: ts.Node) {
-        this.apiNode = node;
     }
 
     setApiType(apiType: string) {
