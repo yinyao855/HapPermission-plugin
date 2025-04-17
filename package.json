@@ -10,8 +10,10 @@
   "dependencies": {
     "arkanalyzer": "1.0.7",
     "browserify-fs": "^1.0.0",
+    "commander": "^13.1.0",
     "csv-parser": "^3.2.0",
     "exceljs": "^4.4.0",
+    "json5": "^2.2.3",
     "log4js": "6.7.1",
     "source-map": "^0.7.4",
     "ts-loader": "^9.5.1"
