@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { getToolConfiguration, ToolConfiguration } from './toolbox.config';
 import { Plugin, PluginOptions } from '../index';
