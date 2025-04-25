@@ -1,20 +1,26 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>org.arkpermission.plugin</id>
+    <id>org.happermission.plugin</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>ArkPermission</name>
+    <name>HapPermission</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="21241072@buaa.edu.cn" url="https://www.yourcompany.com">BUAA</vendor>
+    <vendor email="21241072@buaa.edu.cn" url="https://www.yourcompany.com">Software Man</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        ArkPermission 是一个鸿蒙应用权限检测分析框架，专门用于分析鸿蒙应用权限滥用的情况。
+        HapPermission 是一个鸿蒙应用权限检测分析框架，专门用于分析鸿蒙应用权限滥用的情况。
+        <br />
+        <br />
+        本项目围绕 “权限检测和分析” 这一核心目标，设计并实现了一套基于 ArkAnalyzer 的面向多组件、多场景的动静态鸿蒙应用权限检测分析框架。该框架的架构如图所示，主要包括了基于 ArkAnalyzer 的代码解析与中间表示构建、权限相关要素提取、权限检测与分析等关键能力。
+        <br />
+        <br />
+        <img src="https://cdn.nlark.com/yuque/0/2025/jpeg/55709910/1744903792214-26855f31-09d3-4a8c-8bb4-cc7d80664c47.jpeg" style="width: 100%; height: auto;" />
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -24,19 +30,11 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="ArkPermission"
-                    factoryClass="org.arkpermission.ArkPermissionToolWindowFactory"
+        <toolWindow id="HapPermission"
+                    factoryClass="org.happermission.HapPermissionToolWindowFactory"
                     icon="AllIcons.Actions.EditScheme"
                     anchor="bottom"
                     canCloseContents="true"/>
     </extensions>
 
-    <actions>
-        <action id="ArkPermissionToolWindow"
-                class="org.arkpermission.ArkPermissionAction"
-                text="Run ArkPermission"
-                description="Run arkpermission and show output in ToolWindow">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
-    </actions>
 </idea-plugin>
