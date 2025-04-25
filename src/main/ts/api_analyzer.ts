@@ -24,7 +24,7 @@ export class ApiAnalyzer {
 
     initApiPermissionMap(): Promise<void> {
         this.apiPermissionMap.clear()
-        const filePath = join(__dirname, `../resources/PerAPI/${this.sdkVersion}.csv`);
+        const filePath = join(__dirname, `./assets/PerAPI/${this.sdkVersion}.csv`);
 
         return new Promise((resolve, reject) => {
             fs.createReadStream(filePath)

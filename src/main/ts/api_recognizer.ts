@@ -1,4 +1,3 @@
-import {join} from "path";
 import {
     ArkClass,
     ArkFile,
@@ -11,7 +10,9 @@ import {
 } from "arkanalyzer";
 
 export class SystemApiRecognizer {
-    systemRoot: string;
+    appName: string;
+    appDir: string;
+    sdkPath: string;
     arkUIDecorator = new Set(['@Builder', '@Styles', '@Extend']);
     arkUIRender = new Set(['build']);
     forEachComponents = new Set(['LazyForEach', 'ForEach']);
@@ -19,13 +20,20 @@ export class SystemApiRecognizer {
     apiInfos: ApiDeclarationInformation[] = [];
     apiInfoSet = new Set<string>();
 
-    constructor(systemRoot: string) {
-        this.systemRoot = systemRoot;
+    constructor(appName: string, appDir: string, sdkPath: string) {
+        this.appName = appName;
+        this.appDir = appDir;
+        this.sdkPath = sdkPath;
     }
 
     buildScene() {
         let config: SceneConfig = new SceneConfig();
-        config.buildFromJson(join(__dirname, '../../../arkpermission_config.json'));
+        config.buildConfig(this.appName, this.appDir, [{
+            name: "etsSdk",
+            path: this.sdkPath,
+            moduleName: ""
+        }])
+        // console.log(this.appName, this.appDir, this.sdkPath);
         this.scene.buildBasicInfo(config);
         this.scene.buildScene4HarmonyProject();
         this.scene.collectProjectImportInfos();

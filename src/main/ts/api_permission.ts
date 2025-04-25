@@ -7,8 +7,9 @@ import fs from 'fs';
 import path from 'path';
 import {ApiAnalyzer} from "./api_analyzer";
 
-// 定义 ApiCollector 类
-class ApiCollector {
+
+export class ApiPermission {
+  projectName: string;
   project: Project;
   sdk: Sdk;
   formatFlag: any;
@@ -21,21 +22,26 @@ class ApiCollector {
   apiWriter?: ApiWriter;
 
   constructor(argv: CommandArgs) {
-    let appProject: string | undefined;
-    if (argv.app) {
-      appProject = argv.app;
-    } else if (argv.dir) {
-      appProject = argv.dir;
+    if (!argv.appName) {
+      throw new Error('appName not found');
     }
+    this.projectName = argv.appName;
+    let appProject: string | undefined;
+    // if (argv.app) {
+    //   appProject = argv.app;
+    // } else if (argv.dir) {
+    //   appProject = argv.dir;
+    // }
+    appProject = argv.appDir;
 
     if (!appProject) {
       throw new Error('app not found');
     }
-    this.project = new Project(appProject, argv.dir !== undefined);
-    this.sdk = new Sdk(this.project, argv.sdk, argv.sdkRoot);
+    this.project = new Project(appProject, false);
+    this.sdk = new Sdk(this.project, argv.sdk, undefined);
     this.formatFlag = ReporterFormat.getFlag(argv.format);
     this.outputPath = argv.output ?? appProject;
-    this.logTag = 'ApiCollector';
+    this.logTag = 'ApiPermission';
     this.debugFlag = argv.debug || false;
     this.noRepeat = argv.noRepeat || false;
     this.isIncludeTest = argv.scanTest || false;
@@ -73,7 +79,7 @@ class ApiCollector {
     const eslibs = this.sdk.getESLibs(this.libPath!);
     const appSourceSet = this.project.getAppSources(this.isIncludeTest);
 
-    let systemApiRecognizer = new SystemApiRecognizer(sdkPath);
+    let systemApiRecognizer = new SystemApiRecognizer(this.projectName, this.project.getPath(), sdkPath);
     systemApiRecognizer.buildScene();
     Logger.info(this.logTag, `start scanning ${this.project.getPath()}`);
     appSourceSet.forEach((appCodeFilePath) => {
@@ -90,7 +96,8 @@ class ApiCollector {
     // systemApiRecognizer = undefined;
     await apiWriter.flush();
     fs.writeFileSync(handleFilePath, originalContent);
-    let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, "14");
+    // let sdk_version = this.project.getAppSdkVersion();
+    let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, "12");
     await apiAnalyzer.analyze();
   }
 
@@ -106,12 +113,12 @@ class ApiCollector {
   }
 }
 
-// 定义 MultiProjectApiCollector 类
-class MultiProjectApiCollector {
+
+export class MultiProjectApiPermission {
   argv: CommandArgs;
   libPath?: string;
   isIncludeTest?: boolean;
-  logTag = 'MultiProjectApiCollector';
+  logTag = 'MultiProjectApiPermission';
 
   constructor(argv: CommandArgs) {
     this.argv = argv;
@@ -135,7 +142,7 @@ class MultiProjectApiCollector {
   async start(): Promise<void> {
     const allApps = FileSystem.listAllAppDirs(this.argv.appDir!);
     if (allApps.length === 0) {
-      Logger.info('MultiProjectApiCollector', `project not found in ${this.argv.appDir}`);
+      Logger.info('MultiProjectApiPermission', `project not found in ${this.argv.appDir}`);
       return;
     }
     const output = this.argv.output ?? this.argv.appDir!;
@@ -143,8 +150,8 @@ class MultiProjectApiCollector {
     apiExcelWriter.close();
     allApps.forEach((app) => {
       if (app) {
-        this.argv.app = app;
-        const apiCollector = new ApiCollector(this.argv);
+        this.argv.appDir = app;
+        const apiCollector = new ApiPermission(this.argv);
         // TODO: fix type error
         apiCollector.setApiWriter(<ApiWriter><unknown>apiExcelWriter);
         apiCollector.setLibPath(this.libPath!).setIncludeTest(this.isIncludeTest!).start();
@@ -154,5 +161,3 @@ class MultiProjectApiCollector {
     await apiExcelWriter.flush();
   }
 }
-
-export { ApiCollector, MultiProjectApiCollector };
