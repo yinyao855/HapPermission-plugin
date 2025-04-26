@@ -3,6 +3,18 @@
 ## Introduction
 HapPermission is a permission analysis tool based on ArkAnalyzer. It aims to assist developers and reviewers in quickly analyzing the permission usage of HarmonyOS applications and detecting whether an application misuses permissions.
 
+We also provide a [real application dataset](https://bhpan.buaa.edu.cn/link/AA7F552701EB7B419E855F0E1309C3978F) for testing and validating the functionality of HapPermission.
+The format of the dataset is as follows. Each API version corresponds to a folder, and the folder contains all the applications of that version.
+```
+.
+├── V10
+├── V11
+├── V12
+├── V13
+├── V14
+└── V15
+```
+
 ## Usage
 Install it via `npm`, or download the dependency package and then use `npm install XXX.tgz` for installation.
 ```shell
