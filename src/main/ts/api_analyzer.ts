@@ -1,6 +1,6 @@
 import {ApiDeclarationInformation} from "./api_recognizer";
 import {Logger} from "./utils";
-import {join} from "path";
+import path, {join} from "path";
 import fs from "fs";
 import csv from "csv-parser";
 
@@ -49,7 +49,8 @@ export class ApiAnalyzer {
         await this.initApiPermissionMap()
         let permissionList: string[] = [];
         for (const apiInfo of this.apiInfos) {
-            const qualifiedName = `[${apiInfo.packageName},${apiInfo.typeName},${apiInfo.propertyName},${apiInfo.apiRawText}]`;
+            const packageName = path.basename(apiInfo.packageName, '.d.ts').replace('@', '');
+            const qualifiedName = `[${packageName},${apiInfo.typeName},${apiInfo.propertyName},${apiInfo.apiRawText}]`;
             const permission = this.apiPermissionMap.get(qualifiedName);
             if (permission) {
                 permissionList.push(permission);

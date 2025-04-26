@@ -70,9 +70,9 @@ export class SystemApiRecognizer {
             return;
         }
         for (const stmt of cfg.getStmts()) {
-            // 筛选出ArkInvokeStmt
-            if (stmt instanceof ArkInvokeStmt) {
-                const methodSignature = stmt.getInvokeExpr().getMethodSignature();
+            // 筛选出InvokeExpr
+            if (stmt.containsInvokeExpr()) {
+                const methodSignature = stmt.getInvokeExpr()!.getMethodSignature();
                 let classSignature = methodSignature.getDeclaringClassSignature();
                 let methodSubSignature = methodSignature.getMethodSubSignature();
                 const apiInfo = new ApiDeclarationInformation();
@@ -214,7 +214,7 @@ export class ApiDeclarationInformation {
     }
 
     setApiRawText(apiRawText: string) {
-        this.apiRawText = apiRawText.replace(/;/g, '');
+        this.apiRawText = apiRawText;
     }
 
     setQualifiedName(qualifiedName: string) {
