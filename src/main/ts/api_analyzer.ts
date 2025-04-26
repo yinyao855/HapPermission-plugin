@@ -11,11 +11,13 @@ export class ApiAnalyzer {
     apiInfos: ApiDeclarationInformation[];
     apiPermissionMap: Map<string, string>;
     sdkVersion: string = "14";
+    permissionInfo: ApiDeclarationInformation[];
 
     constructor(apiInfos: ApiDeclarationInformation[], sdkVersion: string) {
         this.apiInfos = apiInfos;
         this.apiPermissionMap = new Map<string, string>();
         this.sdkVersion = sdkVersion;
+        this.permissionInfo = [];
     }
 
     setSdkVersion(sdkVersion: string) {
@@ -47,16 +49,20 @@ export class ApiAnalyzer {
 
     async analyze() {
         await this.initApiPermissionMap()
-        let permissionList: string[] = [];
+        this.permissionInfo = [];
         for (const apiInfo of this.apiInfos) {
             const packageName = path.basename(apiInfo.packageName, '.d.ts').replace('@', '');
             const qualifiedName = `[${packageName},${apiInfo.typeName},${apiInfo.propertyName},${apiInfo.apiRawText}]`;
             const permission = this.apiPermissionMap.get(qualifiedName);
             if (permission) {
-                permissionList.push(permission);
+                apiInfo.apiPermission = permission;
+                this.permissionInfo.push(apiInfo);
             }
         }
-        console.log(permissionList);
         Logger.info('ApiAnalyzer', 'end analyze api permission');
+    }
+
+    getPermissionInfo() {
+        return this.permissionInfo;
     }
 }

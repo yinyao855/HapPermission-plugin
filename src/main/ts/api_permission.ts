@@ -4,7 +4,6 @@ import { SystemApiRecognizer } from './api_recognizer';
 import { ReporterFormat } from './configs';
 import { CommandArgs } from './index'
 import fs from 'fs';
-import path from 'path';
 import {ApiAnalyzer} from "./api_analyzer";
 
 
@@ -67,16 +66,9 @@ export class ApiPermission {
     if (!sdkPath || !fs.existsSync(sdkPath)) {
       return;
     }
-    const handleFilePath = path.join(sdkPath, '/api/@internal/full/global.d.ts');
-    const originalContent = fs.readFileSync(handleFilePath, 'utf-8');
-    // 去除import和export关键字
-    let newContent = originalContent.replace(/import|export/g, '');
-    fs.writeFileSync(handleFilePath, newContent);
+
     Logger.info(this.logTag, `scan app ${this.project.getPath()}`);
     Logger.info(this.logTag, `sdk is in ${sdkPath}`);
-    const apiLibs = this.sdk.getApiLibs();
-    const componentLibs = this.sdk.getComponentLibs();
-    const eslibs = this.sdk.getESLibs(this.libPath!);
     const appSourceSet = this.project.getAppSources(this.isIncludeTest);
 
     let systemApiRecognizer = new SystemApiRecognizer(this.projectName, this.project.getPath(), sdkPath);
@@ -89,16 +81,13 @@ export class ApiPermission {
       systemApiRecognizer.recognize(appCodeFilePath);
     });
     Logger.info(this.logTag, `end scan ${this.project.getPath()}`);
-    const apiWriter = this.getApiWriter();
-    apiWriter.add(systemApiRecognizer.getApiInformations());
-    // avoid oom
-    // TODO: fix type error
-    // systemApiRecognizer = undefined;
-    await apiWriter.flush();
-    fs.writeFileSync(handleFilePath, originalContent);
-    // let sdk_version = this.project.getAppSdkVersion();
-    let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, "12");
+
+    let sdk_version = this.project.getAppSdkVersion() ?? "14";
+    let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, sdk_version);
     await apiAnalyzer.analyze();
+    const apiWriter = this.getApiWriter();
+    apiWriter.add(apiAnalyzer.getPermissionInfo());
+    await apiWriter.flush();
   }
 
   getApiWriter(): ApiWriter {

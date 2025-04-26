@@ -41,7 +41,7 @@ export class Project {
   }
 
   // 获取sdk版本
-  getAppSdkVersion(): number | string | undefined {
+  getAppSdkVersion(): string | undefined {
     const profile = this.getProfile();
 
     if (!profile) {
@@ -59,7 +59,7 @@ export class Project {
     if (profile.app.products) {
       const compileSdkVersion = profile.app.products[0].compileSdkVersion;
       if (typeof compileSdkVersion === 'number') {
-        return compileSdkVersion;
+        return compileSdkVersion.toString();
       }
       const matchResult = compileSdkVersion.match(/\((.+)\)/g);
       if (matchResult) {

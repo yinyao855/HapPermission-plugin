@@ -1,7 +1,6 @@
 import {
     ArkClass,
     ArkFile,
-    ArkInvokeStmt,
     ArkMethod,
     FileSignature,
     LineColPosition,
@@ -13,9 +12,6 @@ export class SystemApiRecognizer {
     appName: string;
     appDir: string;
     sdkPath: string;
-    arkUIDecorator = new Set(['@Builder', '@Styles', '@Extend']);
-    arkUIRender = new Set(['build']);
-    forEachComponents = new Set(['LazyForEach', 'ForEach']);
     scene = new Scene();
     apiInfos: ApiDeclarationInformation[] = [];
     apiInfoSet = new Set<string>();
@@ -65,7 +61,7 @@ export class SystemApiRecognizer {
         if (arkMethod.getName() == '_DEFAULT_ARK_METHOD') {
             return;
         }
-        const cfg = arkMethod.getCfg()!;
+        const cfg = arkMethod.getCfg();
         if (cfg == undefined) {
             return;
         }
@@ -125,7 +121,7 @@ export class SystemApiRecognizer {
         this.apiInfoSet.add(this.formatApiInfo(apiInfo));
     }
 
-    getApiInformations() {
+    getApiInformation() {
         return this.apiInfos ? this.apiInfos : [];
     }
 
@@ -158,13 +154,12 @@ export class ApiDeclarationInformation {
     sourceFileName: string = '';
     deprecated: string = '';
     apiRawText: string = '';
-    qualifiedName: string = '';
-    useInstead: string = '';
     typeName: string = '';
     componentName: string = '';
     apiType: string = '';
     dtsPath: string = '';
-    apiText: string = ''
+    apiText: string = '';
+    apiPermission: string = '';
 
     setSdkFileName(fileName: string) {
         this.dtsName = fileName;
@@ -215,29 +210,5 @@ export class ApiDeclarationInformation {
 
     setApiRawText(apiRawText: string) {
         this.apiRawText = apiRawText;
-    }
-
-    setQualifiedName(qualifiedName: string) {
-        this.qualifiedName = qualifiedName;
-    }
-
-    setUseInstead(useInstead: string) {
-        this.useInstead = useInstead;
-    }
-
-    setComponentName(componentName: string) {
-        this.componentName = componentName;
-    }
-
-    setApiType(apiType: string) {
-        this.apiType = apiType;
-    }
-
-    setDtsPath(dtsPath: string) {
-        this.dtsPath = dtsPath;
-    }
-
-    setCompletedText(completedText: string) {
-        this.apiText = completedText;
     }
 }
