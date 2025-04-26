@@ -2,18 +2,18 @@
   "name": "hap-permission",
   "version": "1.0.0",
   "description": "A permission analysis tool based on ArkAnalyzer",
-  "main": "dist/entry/main.js",
+  "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf ./dist && rm -f ./*.tgz",
-    "build": "npm run clean && tsc && mkdir ./dist/assets && cp -r ./src/main/ts/assets/* ./dist/assets",
+    "clean": "rm -rf ./lib && rm -f ./*.tgz",
+    "build": "npm run clean && tsc && mkdir ./lib/assets && cp -r ./src/main/ts/assets/* ./lib/assets",
     "pack": "npm run build && npm pack"
   },
   "bin": {
-    "hap-permission": "dist/entry/main.js"
+    "haper": "lib/main.js"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "dependencies": {
     "arkanalyzer": "1.0.7",

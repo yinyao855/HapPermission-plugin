@@ -7,7 +7,7 @@ plugins {
     id("com.github.node-gradle.node") version "7.1.0"
 }
 
-group = "org.arkpermission"
+group = "org.hap-permission"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -60,7 +60,7 @@ tasks {
 
     named("clean") {
         doLast {
-            delete("build/resources/main")
+            delete("lib")
         }
     }
 }

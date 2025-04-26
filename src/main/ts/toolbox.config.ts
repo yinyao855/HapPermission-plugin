@@ -1,4 +1,4 @@
-import {AppApiPermissionPlugin} from '../index';
+import {AppApiPermissionPlugin} from './index';
 
 export type ToolConfiguration = {
   plugins: AppApiPermissionPlugin[];

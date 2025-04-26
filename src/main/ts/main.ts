@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { getToolConfiguration, ToolConfiguration } from './toolbox.config';
-import { Plugin, PluginOptions } from '../index';
+import { Plugin, PluginOptions } from './index';
 
 // 工具箱命令类
 class ToolBoxCommander {
