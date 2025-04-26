@@ -85,8 +85,9 @@ export class ApiPermission {
     let sdk_version = this.project.getAppSdkVersion() ?? "14";
     let apiAnalyzer = new ApiAnalyzer(systemApiRecognizer.apiInfos, sdk_version);
     await apiAnalyzer.analyze();
+    apiAnalyzer.analyzePermissionAbuse(this.project.getPermissionList());
     const apiWriter = this.getApiWriter();
-    apiWriter.add(apiAnalyzer.getPermissionInfo());
+    apiWriter.add(apiAnalyzer.getPermissionApiInfo(), apiAnalyzer.getPermissionInfo());
     await apiWriter.flush();
   }
 
