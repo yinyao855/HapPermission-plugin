@@ -23,6 +23,11 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
+dependencies {
+    implementation("org.apache.poi:poi:5.4.1")
+    implementation("org.apache.poi:poi-ooxml:5.4.1")
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -51,6 +56,12 @@ tasks {
     // 构建ts文件
     register<NpmTask>("compileTypeScript") {
         args.set(listOf("run", "build"))
+//        finalizedBy("copyJS")
+    }
+
+    register<Copy>("copyJS") {
+        from("lib")
+        into("src/main/resources/lib")
     }
 
     // 添加与 build 任务的依赖关系

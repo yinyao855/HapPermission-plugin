@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./lib && rm -f ./*.tgz",
-    "build": "npm run clean && tsc && mkdir ./lib/assets && cp -r ./src/main/ts/assets/* ./lib/assets",
+    "build": "npm run clean && esbuild ./src/main/ts/main.ts --bundle --outfile=lib/main.js --platform=node --minify && mkdir ./lib/assets && cp -r ./src/main/ts/assets/* ./lib/assets && cp -r ./lib ./src/main/resources/lib",
     "pack": "npm run build && npm pack"
   },
   "bin": {
@@ -24,6 +24,7 @@
     "source-map": "^0.7.4"
   },
   "devDependencies": {
+    "esbuild": "^0.25.4",
     "ts-node": "^10.9.2"
   }
 }
